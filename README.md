@@ -11,7 +11,7 @@
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-A practical **Rasterio cookbook** for Python raster workflows. The repository currently contains three executable, synthetic-data examples for GeoTIFF read/write and windowed reads. Reprojection and Cloud Optimized GeoTIFF (COG) integration remain planned. Validate each pattern against your own data, software versions, and operating environment before adopting it.
+A practical **Rasterio cookbook** for Python raster workflows. The repository currently contains three executable, synthetic-data examples for GeoTIFF read/write, windowed reads, and reprojection, plus a design-only COG-layout example (04) that is not yet executed or covered by tests. Validate each pattern against your own data, software versions, and operating environment before adopting it.
 
 ## Repository role and status
 
@@ -47,6 +47,7 @@ The examples create their own synthetic input data; no external raster download 
 | 01 | [examples/01-read-write/run.py](examples/01-read-write/run.py) | Create a deterministic GeoTIFF, inspect metadata, write a pixel copy, and verify CRS and pixel equality. |
 | 02 | [examples/02-windowed-reads/run.py](examples/02-windowed-reads/run.py) | Create a tiled 512 × 512 GeoTIFF, read 128 × 128 windows, accumulate values, and compare the result with the expected total. |
 | 03 | [examples/03-reprojection/run.py](examples/03-reprojection/run.py) | Reproject a synthetic EPSG:4326 raster to EPSG:3857 with an explicit destination grid and NoData preservation checks. |
+| 04 | [examples/04-cog-pairing/run.py](examples/04-cog-pairing/run.py) | Write a COG-layout GeoTIFF (tiled, overviews, deflate), check its layout, and document the gap to full COG conformance. Design-only — not executed, not covered by tests. |
 
 Run an example from the repository root:
 
@@ -54,6 +55,7 @@ Run an example from the repository root:
 python examples/01-read-write/run.py
 python examples/02-windowed-reads/run.py
 python examples/03-reprojection/run.py
+python examples/04-cog-pairing/run.py
 ```
 
 Each example writes outputs in its current working directory. To keep the repository checkout clean, run it from a temporary directory, for example:
@@ -73,11 +75,11 @@ Replace `/path/to/rasterio-cookbook` with the absolute path to your checkout.
 - [requirements-test.txt](requirements-test.txt) declares the test dependencies.
 - [.github/workflows/tests.yml](.github/workflows/tests.yml) runs the test suite on pull requests and pushes to the default branch.
 
-The tests verify selected behavior for these three examples. They do not yet test reprojection, COG conformance, remote range requests, large-raster performance, or a broad Rasterio/GDAL version matrix.
+The tests verify selected behavior for these three examples. They do not yet test reprojection, COG conformance, remote range requests, large-raster performance, or a broad Rasterio/GDAL version matrix. Example 04 is not covered by the test suite: it is a design-only pattern (gate 1 target) until it is executed against a fleet Rasterio environment.
 
 ## Roadmap
 
-1. Add a COG creation/validation example that checks the produced layout and documents the distinction between metadata checks and full conformance.
+1. Add a COG creation/validation example that checks the produced layout and documents the distinction between metadata checks and full conformance. — Landed as design-only example 04; execution and test coverage remain open.
 2. Expand tests across supported Rasterio/GDAL environments and add failure-path coverage where it provides meaningful assurance.
 
 ## Contributing
