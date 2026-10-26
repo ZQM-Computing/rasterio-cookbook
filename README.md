@@ -15,7 +15,7 @@ A **rasterio cookbook** for raster reads, windows, reprojection, and COG pairing
 
 ## Repository role and status
 
-**Status:** Active, public — seeding. Pattern passes land in follow-up work from fleet-verified setups; the tables below list what is planned, not what is already written.
+**Status:** Active, public — first executable patterns implemented. Examples are synthetic and self-contained; CI smoke-tests their outputs, but this does not establish production readiness.
 
 **What this repository is:** rasterio patterns — see the table below.
 
@@ -33,14 +33,14 @@ Python geospatial developers who read and write rasters programmatically.
 - Python 3.11+
 - A GeoTIFF or COG to work with
 
-## Patterns (planned)
+## Patterns
 
 | # | Example | What it will demonstrate |
 |---|---------|--------------------------|
-| 01 | `01-read-write` | Reading raster metadata, bands, and profiles; writing outputs |
-| 02 | `02-windowed-reads` | Windowed reads for large rasters without loading them whole |
-| 03 | `03-reproject` | Reprojecting rasters and warping between CRSs |
-| 04 | `04-cog-pairing` | Pairing rasterio writes with COG validation and TiTiler serving |
+| 01 | [`01-read-write`](examples/01-read-write/run.py) | Create a GeoTIFF, inspect dimensions/CRS/bounds, copy pixels, and verify output |
+| 02 | [`02-windowed-reads`](examples/02-windowed-reads/run.py) | Iterate through raster windows and validate an incremental pixel sum |
+| 03 | `03-reproject` | Planned: reprojection and warping between CRSs |
+| 04 | `04-cog-pairing` | Planned: pair Rasterio output with COG validation and TiTiler serving |
 
 ## Repository layout
 
@@ -58,7 +58,7 @@ rasterio-cookbook/
 
 ## Contributing
 
-A contributing guide lands with the first pattern pass. Report security issues to <zqmcomputing@gmail.com> — please do not open a public issue for those.
+Contributions should include reproducible examples and tests that validate output data, CRS, dimensions, and failure behavior. Report security issues to <zqmcomputing@gmail.com> — please do not open a public issue for those.
 
 ## More from this series
 
