@@ -11,7 +11,7 @@
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-A practical **Rasterio cookbook** for Python raster workflows. The repository currently contains two executable, synthetic-data examples for GeoTIFF read/write and windowed reads. Reprojection and Cloud Optimized GeoTIFF (COG) integration remain planned. Validate each pattern against your own data, software versions, and operating environment before adopting it.
+A practical **Rasterio cookbook** for Python raster workflows. The repository currently contains three executable, synthetic-data examples for GeoTIFF read/write and windowed reads. Reprojection and Cloud Optimized GeoTIFF (COG) integration remain planned. Validate each pattern against your own data, software versions, and operating environment before adopting it.
 
 ## Repository role and status
 
@@ -33,10 +33,10 @@ Python geospatial developers who need reproducible examples for reading, writing
 
 For local testing, install the test dependencies:
 
-\`\`\`bash
+```bash
 python -m pip install -r requirements-test.txt
 python -m pytest -q
-\`\`\`
+```
 
 The examples create their own synthetic input data; no external raster download is required.
 
@@ -46,38 +46,39 @@ The examples create their own synthetic input data; no external raster download 
 |---|---|---|
 | 01 | [examples/01-read-write/run.py](examples/01-read-write/run.py) | Create a deterministic GeoTIFF, inspect metadata, write a pixel copy, and verify CRS and pixel equality. |
 | 02 | [examples/02-windowed-reads/run.py](examples/02-windowed-reads/run.py) | Create a tiled 512 × 512 GeoTIFF, read 128 × 128 windows, accumulate values, and compare the result with the expected total. |
+| 03 | [examples/03-reprojection/run.py](examples/03-reprojection/run.py) | Reproject a synthetic EPSG:4326 raster to EPSG:3857 with an explicit destination grid and NoData preservation checks. |
 
 Run an example from the repository root:
 
-\`\`\`bash
+```bash
 python examples/01-read-write/run.py
 python examples/02-windowed-reads/run.py
-\`\`\`
+python examples/03-reprojection/run.py
+```
 
 Each example writes outputs in its current working directory. To keep the repository checkout clean, run it from a temporary directory, for example:
 
-\`\`\`bash
+```bash
 mkdir -p /tmp/rasterio-cookbook-run
 cd /tmp/rasterio-cookbook-run
 python /path/to/rasterio-cookbook/examples/01-read-write/run.py
 python /path/to/rasterio-cookbook/examples/02-windowed-reads/run.py
-\`\`\`
+```
 
-Replace \`/path/to/rasterio-cookbook\` with the absolute path to your checkout.
+Replace `/path/to/rasterio-cookbook` with the absolute path to your checkout.
 
 ## Tests and continuous integration
 
-- [tests/test_examples.py](tests/test_examples.py) checks Python syntax and executes both examples in temporary directories.
+- [tests/test_examples.py](tests/test_examples.py) checks Python syntax and executes all three examples in temporary directories.
 - [requirements-test.txt](requirements-test.txt) declares the test dependencies.
 - [.github/workflows/tests.yml](.github/workflows/tests.yml) runs the test suite on pull requests and pushes to the default branch.
 
-The tests verify selected behavior for these two examples. They do not yet test reprojection, COG conformance, remote range requests, large-raster performance, or a broad Rasterio/GDAL version matrix.
+The tests verify selected behavior for these three examples. They do not yet test reprojection, COG conformance, remote range requests, large-raster performance, or a broad Rasterio/GDAL version matrix.
 
 ## Roadmap
 
-1. Add a reprojection example with explicit source/target CRS and transformed-bounds assertions.
-2. Add a COG creation/validation example that checks the produced layout and documents the distinction between metadata checks and full conformance.
-3. Expand tests across supported Rasterio/GDAL environments and add failure-path coverage where it provides meaningful assurance.
+1. Add a COG creation/validation example that checks the produced layout and documents the distinction between metadata checks and full conformance.
+2. Expand tests across supported Rasterio/GDAL environments and add failure-path coverage where it provides meaningful assurance.
 
 ## Contributing
 

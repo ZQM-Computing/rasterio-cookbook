@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = (
     ("01-read-write", "Verified copy: output/rasterio_copy.tif"),
     ("02-windowed-reads", "Windows processed: 16"),
+    ("03-reprojection", "Reprojection verified: output/reprojected_3857.tif"),
 )
 
 
@@ -45,3 +46,12 @@ def test_examples_run_and_write_valid_rasters(tmp_path):
     with rasterio.open(tmp_path / "output" / "windowed_demo.tif") as dataset:
         assert dataset.width == 512 and dataset.height == 512
         assert dataset.crs == rasterio.crs.CRS.from_epsg(3857)
+    with rasterio.open(tmp_path / "output" / "reprojected_3857.tif") as dataset:
+        assert dataset.width > 0 and dataset.height > 0
+        assert dataset.crs == rasterio.crs.CRS.from_epsg(3857)
+        assert dataset.nodata == -9999.0
+        assert dataset.transform.a > 0 and dataset.transform.e < 0
+        values = dataset.read(1)
+        valid = values != dataset.nodata
+        assert valid.any()
+        assert np.isfinite(values[valid]).all()
