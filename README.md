@@ -69,6 +69,16 @@ python /path/to/rasterio-cookbook/examples/02-windowed-reads/run.py
 
 Replace `/path/to/rasterio-cookbook` with the absolute path to your checkout.
 
+## Window-size benchmark
+
+The windowed-read example uses native GeoTIFF blocks for its default processing path. To compare that strategy with smaller or larger logical windows on your own hardware, run:
+
+```bash
+python examples/02-windowed-reads/benchmark.py --width 8192 --height 8192 --block-size 256 --window-sizes 64 128 256 512 1024 --repeats 5 --cache-mb 256
+```
+
+The benchmark writes a deterministic compressed synthetic raster in a temporary directory, runs each read strategy against the same data, verifies the exact pixel sum on every repeat, and reports median/min/max elapsed time and window count. It reports observations rather than asserting a performance winner: GDAL's block cache, compression, storage, memory, and window alignment affect results. Keep dimensions and cache settings identical when comparing runs; record Rasterio/GDAL versions and hardware alongside results. Start with modest dimensions before increasing memory and disk requirements.
+
 ## Tests and continuous integration
 
 - [tests/test_examples.py](tests/test_examples.py) checks Python syntax and executes all three examples in temporary directories.
