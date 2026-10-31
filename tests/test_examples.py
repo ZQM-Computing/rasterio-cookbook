@@ -36,7 +36,7 @@ def test_examples_run_and_write_valid_rasters(tmp_path):
             check=False,
         )
         assert result.returncode == 0, (
-            f"{name} failed ({result.returncode}).\\nstdout:\\n{result.stdout}\\nstderr:\\n{result.stderr}"
+            f"{name} failed ({result.returncode}).\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
         )
         assert marker in result.stdout
     with rasterio.open(tmp_path / "output" / "rasterio_copy.tif") as dataset:
