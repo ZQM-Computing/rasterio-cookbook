@@ -19,6 +19,8 @@ def test_example_scripts_have_valid_python_syntax():
     for name, _ in EXAMPLES:
         script = ROOT / "examples" / name / "run.py"
         compile(script.read_text(encoding="utf-8"), str(script), "exec")
+    benchmark = ROOT / "examples" / "02-windowed-reads" / "benchmark.py"
+    compile(benchmark.read_text(encoding="utf-8"), str(benchmark), "exec")
 
 
 def test_examples_run_and_write_valid_rasters(tmp_path):
@@ -56,3 +58,31 @@ def test_examples_run_and_write_valid_rasters(tmp_path):
         valid = values != dataset.nodata
         assert valid.any()
         assert np.isfinite(values[valid]).all()
+
+
+def test_window_benchmark_checks_equivalent_results(tmp_path):
+    script = ROOT / "examples" / "02-windowed-reads" / "benchmark.py"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(script),
+            "--width", "128",
+            "--height", "128",
+            "--block-size", "64",
+            "--window-sizes", "32", "64",
+            "--repeats", "1",
+            "--cache-mb", "16",
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+    assert result.returncode == 0, (
+        f"Benchmark failed ({result.returncode}).\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+    )
+    assert "strategy,window_size,windows,median_ms,min_ms,max_ms" in result.stdout
+    assert "native,native,4," in result.stdout
+    assert "logical,32,16," in result.stdout
+    assert "logical,64,4," in result.stdout
