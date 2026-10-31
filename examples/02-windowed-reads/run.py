@@ -32,9 +32,10 @@ def main() -> None:
     total = 0
     window_count = 0
     with rasterio.open(RASTER_PATH) as dataset:
-        # block_windows() aligns reads with the GeoTIFF's physical storage
-        # blocks, avoiding repeated decompression of the same block for
-        # multiple smaller logical windows.
+        # block_windows() aligns iteration with the GeoTIFF's physical
+        # storage layout and reduces logical read calls. GDAL's block cache
+        # may already avoid repeated decompression for smaller windows, so
+        # wall-clock effects depend on the driver, cache, and workload.
         for _, window in dataset.block_windows(1):
             tile = dataset.read(1, window=window)
             total += int(tile.sum(dtype=np.uint64))
